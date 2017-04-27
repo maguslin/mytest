@@ -1,0 +1,1 @@
+#define GFSDK_HAIRWORKS_BUILD_STRING "manual-build.JIHOC-DT.Wed 04/23/2014.15:36:52.97.x64.release" 

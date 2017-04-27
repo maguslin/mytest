@@ -1,0 +1,16 @@
+// Visual Studio Hint file (cpp.hint) - Helps out Intellisense to parse macros correctly
+//
+// https://msdn.microsoft.com/en-us/library/dd997977.aspx
+
+#define NV_OVERRIDE override
+
+#define NV_CO_DECLARE_CLASS_BASE(type) public:
+#define NV_CO_DECLARE_CLASS(type, parent) public:
+#define NV_CO_DECLARE_POLYMORPHIC_CLASS_BASE(type) public:
+#define NV_CO_DECLARE_POLYMORPHIC_CLASS(type, parent) public:
+#define NV_CO_DECLARE_INTERFACE_BASE(type) public:
+#define NV_CO_DECLARE_INTERFACE(type, parent) public:
+#define NV_CO_DECLARE_STACK_POLYMORPHIC_CLASS_BASE(type) public:
+#define NV_CO_DECLARE_STACK_POLYMORPHIC_CLASS(type, parent) public:
+
+
