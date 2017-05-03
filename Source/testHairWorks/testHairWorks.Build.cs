@@ -22,10 +22,8 @@ public class testHairWorks : ModuleRules
 		PublicIncludePaths.AddRange(
 			new string[] {
                 "testHairWorks/Public",
-                "Engine/Public",
-                "Engine/Classes",
-                "UnrealEd/Public",
-                "UnrealEd/Classes",
+                "../../../Source/Runtime/Engine/Public",
+                "../../../Source/Runtime/Engine/Classes",
 				// ... add public include paths required here ...
 			}
 			);
@@ -34,8 +32,7 @@ public class testHairWorks : ModuleRules
 		PrivateIncludePaths.AddRange(
 			new string[] {
 				"testHairWorks/Private",
-                "Engine/Private",
-                "UnrealEd/Private",
+                "../../../Source/Runtime/Engine/Private",
                 "../../../Source/Runtime/Renderer/Private",
 				// ... add other private include paths required here ...
 			}
