@@ -4,6 +4,17 @@
 #include "testHairWorksPrivatePCH.h"
 #include "TestDll.h"  // Only needed to load the Dll on windows
 #include "DynamicRHI.h"
+//#include "AllowWindowsPlatformTypes.h" 
+//#include "d3dx12.h"
+//#include "HideWindowsPlatformTypes.h"
+//#include "RenderResource.h"
+//#include "D3D12RHIPrivate.h"
+//#include "D3D12Util.h"
+//#include "D3D12Resources.h"
+#include "Runtime/Windows/D3D11RHI/Private/D3D11RHIPrivate.h"
+#include "AllowWindowsPlatformTypes.h" 
+#include <d3d11.h>
+#include "HideWindowsPlatformTypes.h"
 #define LOCTEXT_NAMESPACE "FtestHairWorksModule"
 
 typedef int(*_myPrint)(int age1, int age);
@@ -25,14 +36,34 @@ void FtestHairWorksModule::StartupModule()
 	{
 		return;
 	}
-	auto device = reinterpret_cast<ID3D12Device*>(GDynamicRHI->RHIGetNativeDevice());
-	//這個判斷 後面在做，需要判斷是不是dx12
-	if (!device )
-	{
-		UE_LOG(LogTemp, Error, TEXT("Need D3D_FEATURE_LEVEL_12_0."));
-		return;
-	}
+	ID3D11Device* device = reinterpret_cast<ID3D11Device*>(GDynamicRHI->RHIGetNativeDevice());
+	ID3D11DeviceContext *deviceContext = NULL;
+	device->GetImmediateContext(&deviceContext);
+	check(deviceContext);
+	
+	
+	//ID3D11DeviceContext* deviceContext = GDynamicRHI->RHIGetDefaultContext()
+	//FD3D12Device* deviceP = static_cast<FD3D12CommandContext*>(GDynamicRHI->RHIGetDefaultContext())->GetParentDevice();
+	////FD3D12CommandContext& CmdList = deviceP->GetDefaultCommandContext();//.CommandListHandle.CommandList();
+	//ID3D12GraphicsCommandList* CmdList = deviceP->GetDefaultCommandContext().CommandListHandle.CommandList();
+	//
+	//if (!CmdList)
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("No Command List Get."));
+	//}
 
+	////這個判斷 後面在做，需要判斷是不是dx12
+	//if (!device )
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("Need D3D_FEATURE_LEVEL_12_0."));
+	//	return;
+	//}
+	//NvCo::Dx12TargetInfo m_targetInfo;
+	//NvHair::Dx12InitInfo initInfo;
+	//m_targetInfo.init();
+	//m_targetInfo.m_depthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//m_targetInfo.m_renderTargetFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	//initInfo.m_targetInfo = m_targetInfo;
 	// Check multi thread support
 	/*if ((D3DDevice.GetCreationFlags() & D3D12_CREATE_DEVICE_SINGLETHREADED) != 0)
 	{
@@ -45,8 +76,11 @@ void FtestHairWorksModule::StartupModule()
 #else
 	FString platform = "Win32/";
 #endif
+
+
 	FString path =  *FPaths::EnginePluginsDir();//IPluginManager::Get().FindPlugin("testHairWorks")->GetBaseDir();
-	FString dllPath = path + _TEXT("/testHairWorks") + "/ThirdParty/HairLib/" + platform + "Dll/" + "NvHairWorksDx12.win64.dll";
+	//FString dllPath = path + _TEXT("/testHairWorks") + "/ThirdParty/HairLib/" + platform + "Dll/" + "NvHairWorksDx12.win64.dll";
+	FString dllPath = path + _TEXT("/testHairWorks") + "/ThirdParty/HairLib/" + platform + "Dll/" + "NvHairWorksDx11.win64.dll";
 	hairSdk = NvHair::loadSdk(TCHAR_TO_ANSI(*dllPath), NV_HAIR_VERSION);
 	if (!hairSdk)
 		UE_LOG(LogTemp, Log, TEXT("Load sdk failed!"))
@@ -58,6 +92,7 @@ void FtestHairWorksModule::StartupModule()
 	AssetConversionSettings.m_targetUpAxisHint = NvHair::AxisHint::Z_UP;
 	//FString dllPath = path +_TEXT("/testHairWorks")+ "/ThirdParty/HairLib/" + platform + "Dll/" + "TestDll.dll";
 	//hairPtr = FPlatformProcess::GetDllHandle(*dllPath);
+
 	//if (!hairPtr)
 	//{
 	//	UE_LOG(LogTemp, Warning, TEXT("Failed to load HairWorks library."))
@@ -69,6 +104,8 @@ void FtestHairWorksModule::StartupModule()
 	//	UE_LOG(LogTemp, Log, TEXT("MyPrint--------------"));
 	//	UE_LOG(LogTemp, Log, buff);
 	//}
+	static_cast<NvHair::Sdk*>(hairSdk)->initRenderResources(NvCo::Dx11Type::wrap(device), NvCo::Dx11Type::wrap(deviceContext));
+	//static_cast<NvHair::Sdk*>(hairSdk)->initRenderResources(NvCo::Dx12Type::wrap(device), NvCo::Dx12Type::wrap(CmdList), NvHair::Dx12SdkType::wrapPtr(&initInfo));
 }
 //bool FtestHairWorksModule::importTestDll()
 //{
