@@ -36,21 +36,21 @@ public class testHairWorks : ModuleRules
 				"testHairWorks/Private",
                 "Engine/Private",
                 "UnrealEd/Private",
-                "../../../../Source/Runtime/Renderer/Private",
+                "../../../Source/Runtime/Renderer/Private",
 				// ... add other private include paths required here ...
 			}
 			);
-			
-		
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"Core",
-                "UnrealEd",
-                "Engine",
-				// ... add other public dependencies that you statically link with here ...
-			}
-			);
+
+
+   //     PublicDependencyModuleNames.AddRange(
+			//new string[]
+			//{
+			//	"Core",
+   //             "UnrealEd",
+   //             "Engine",
+			//	// ... add other public dependencies that you statically link with here ...
+			//}
+			//);
 			
 		
 		PrivateDependencyModuleNames.AddRange(
@@ -71,6 +71,10 @@ public class testHairWorks : ModuleRules
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
+        if (UEBuildConfiguration.bBuildEditor == true)
+        {
+            PrivateDependencyModuleNames.Add("UnrealEd");
+        }
         //if (UEBuildConfiguration.bBuildEditor == true)
         //{
         //    PrivateDependencyModuleNames.Add("UnrealEd");
@@ -92,21 +96,21 @@ public class testHairWorks : ModuleRules
 
             isLibrarySupported = true;
             System.Console.WriteLine("----- isLibrarySupported true");
-            PrivateDependencyModuleNames.AddRange(
-                    new string[]
-                    {
-
-                        "D3D12RHI",
-                        "UnrealEd"
-                    });
-
+           
             PrivateIncludePaths.AddRange(
-                new string[]
-                {
-                    // ... add other private include paths required here ...
-				        "../../../../Source/Runtime/Windows/D3D12RHI/Private",
-                        "../../../../Source/Runtime/Windows/D3D12RHI/Private/Windows",
-                });
+                  new string[]
+                  {
+                        "../../../Source/Runtime/Windows/D3D11RHI/Private",
+                        "../../../Source/Runtime/Windows/D3D11RHI/Private/Windows",
+                        "../../../Source/Runtime/Windows/D3D12RHI/Private",
+                        "../../../Source/Runtime/Windows/D3D12RHI/Private/Windows",
+                  });
+            PrivateDependencyModuleNames.AddRange(
+                   new string[]
+                   {
+						"D3D11RHI",
+                        "D3D12RHI",
+                   });
             string PlatformSubPath = (Target.Platform == UnrealTargetPlatform.Win64) ? "Win64" : "Win32";
             //string LibrariesPath = Path.Combine(MyTestLibPath, "Lib");
             //PublicAdditionalLibraries.Add(Path.Combine(LibrariesPath, PlatformSubPath, "TestLib.lib"));//加载第三方静态库.lib
@@ -114,6 +118,7 @@ public class testHairWorks : ModuleRules
             string DllPath = Path.Combine(MyLibPath, "Dll");
             PublicDelayLoadDLLs.Add(Path.Combine(DllPath, PlatformSubPath, "TestDll.dll"));
             RuntimeDependencies.Add(new RuntimeDependency(Path.Combine(DllPath, PlatformSubPath, "TestDll.dll")));
+            AddEngineThirdPartyPrivateStaticDependencies(Target, "DX11");
             AddEngineThirdPartyPrivateStaticDependencies(Target, "DX12");
             MinFilesUsingPrecompiledHeaderOverride = 1;
             bFasterWithoutUnity = true;
