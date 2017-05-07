@@ -108,7 +108,7 @@ void FHairworksSceneProxy::DoRender(FRHICommandListBase & RHICmdList, EDrawType 
 	//HairWorks::GetSDK()->preRender(RenderInterp);
 
 	// Flush render states
-	HairWorks::GetD3DHelper().CommitShaderResources(RHICmdList.GetContext());
+	//GetD3DHelper().CommitShaderResources(RHICmdList.GetContext());
 
 	// Draw
 	if (DrawType == EDrawType::Visualization)
@@ -267,7 +267,7 @@ void FHairworksSceneProxy::UpdateDynamicData_RenderThread(const FDynamicRenderDa
 	for (auto Idx = 0; Idx < NvHair::ETextureType::COUNT_OF; ++Idx)
 	{
 		auto TextureRef = HairTextures[Idx];
-		GetSDK()->setTexture(HairInstanceId, (NvHair::ETextureType)Idx, NvCo::Dx11Type::wrap(HairWorks::GetD3DHelper().GetShaderResourceView(TextureRef.GetReference())));
+	//	GetSDK()->setTexture(HairInstanceId, (NvHair::ETextureType)Idx, NvCo::Dx11Type::wrap(GetD3DHelper().GetShaderResourceView(TextureRef.GetReference())));
 	}
 
 	// Add pin meshes

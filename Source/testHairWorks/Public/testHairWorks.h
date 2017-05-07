@@ -10,6 +10,17 @@
 #include <string>
 #include "ModuleManager.h"
 
+struct ID3D11DeviceContext;
+struct ID3D11ShaderResourceView;
+
+class ID3DHelper
+{
+public:
+	virtual ID3D11DeviceContext* GetDeviceContext(const IRHICommandContext&) = 0;
+	virtual ID3D11ShaderResourceView* GetShaderResourceView(FRHITexture2D*) = 0;
+	virtual void CommitShaderResources(IRHICommandContext&) = 0;
+};
+ID3DHelper& GetD3DHelper();
 class FtestHairWorksModule : public IModuleInterface
 {
 public:

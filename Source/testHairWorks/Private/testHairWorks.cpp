@@ -17,6 +17,30 @@
 #include "HideWindowsPlatformTypes.h"
 #define LOCTEXT_NAMESPACE "FtestHairWorksModule"
 
+class FHairWorksD3DHelper : public ID3DHelper
+{
+	virtual ID3D11DeviceContext* GetDeviceContext(const IRHICommandContext& CmdContext) override
+	{
+		auto& RHI = static_cast<const FD3D11DynamicRHI&>(CmdContext);
+		return RHI.GetDeviceContext();
+	}
+
+	virtual ID3D11ShaderResourceView* GetShaderResourceView(FRHITexture2D* Texture) override
+	{
+		auto* D3D11Texture = static_cast<TD3D11Texture2D<FD3D11BaseTexture2D>*>(Texture);
+		return D3D11Texture ? D3D11Texture->GetShaderResourceView() : nullptr;
+	}
+
+	virtual void CommitShaderResources(IRHICommandContext& CmdContext) override
+	{
+		auto& RHI = static_cast<FD3D11DynamicRHI&>(CmdContext);
+
+
+		//RHI.CommitNonComputeShaderConstants();
+		//RHI.CommitGraphicsResourceTables();
+	}
+};
+
 typedef int(*_myPrint)(int age1, int age);
 _myPrint m_myPrintFromDll;
 void* hairSdk = NULL;
